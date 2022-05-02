@@ -1,82 +1,40 @@
 #!/usr/bin/python3
-""" 5. LFU Caching
-"""
-
-from enum import Enum
-from heapq import heappush, heappop
-from itertools import count
-
-BaseCaching = __import__("base_caching").BaseCaching
-
-
-class HeapItemStatus(Enum):
-    """ HeapItemStatus class.
-    """
-    ACTIVE = 1
-    INACTIVE = 2
+"""100-lfu_cache"""
+from base_caching import BaseCaching
 
 
 class LFUCache(BaseCaching):
-    """ Create a class LFUCache that inherits from BaseCaching and is a caching
-    system
+    """creates a LFUCache cache system without limit
+   methods:
+        put(key, item): adds a key/value pair to cache
+        get(key): gets the key value from cache
     """
 
     def __init__(self):
-        """ Init
-        """
+        """init object"""
         super().__init__()
-        self.heap = []
-        self.map = {}
-        self.counter = count()
+        self.uses = dict()
 
     def put(self, key, item):
-        """ Must assign to the dictionary self.cache_data the item value for
-        the key key
-        """
-        if key and item:
-            if key in self.cache_data:
-                self.rehydrate(key)
-            else:
-                if self.is_full():
-                    self.evict()
-                self.add_to_heap(key)
-            self.cache_data[key] = item
+        """ Add an item in the cache """
+        if(key is None or item is None):
+            return
+
+        if(len(self.cache_data.keys()) == BaseCaching.MAX_ITEMS
+           and key not in self.cache_data.keys()):
+            discard_key = min(self.uses, key=self.uses.get)
+            del self.cache_data[discard_key]
+            del self.uses[discard_key]
+            print("DISCARD: {}".format(discard_key))
+        if(key in self.cache_data.keys()):
+            self.uses[key] += 1
+        else:
+            self.uses[key] = 1
+        self.cache_data[key] = item
 
     def get(self, key):
-        """ Must return the value in self.cache_data linked to key.
-        """
-        if key in self.cache_data:
-            self.rehydrate(key)
-            return self.cache_data.get(key)
-
-    def is_full(self):
-        """ If the number of items in self.cache_data is higher that
-        BaseCaching.MAX_ITEMS
-        """
-        return len(self.cache_data) >= self.MAX_ITEMS
-
-    def evict(self):
-        """ you must print DISCARD: with the key discarded and following by a
-        new line
-        """
-        while self.heap:
-            _, __, item, status = heappop(self.heap)
-            if status == HeapItemStatus.ACTIVE:
-                print("DISCARD: " + str(item))
-                del self.cache_data[item]
-                return
-
-    def rehydrate(self, key):
-        """ Marks current item as inactive and reinserts updated count back
-        into heap.
-        """
-        entry = self.map[key]
-        entry[-1] = HeapItemStatus.INACTIVE
-        self.add_to_heap(key, entry[0])
-
-    def add_to_heap(self, key, count=0):
-        """ Adds a new entry into heap.
-        """
-        entry = [1 + count, next(self.counter), key, HeapItemStatus.ACTIVE]
-        self.map[key] = entry
-        heappush(self.heap, entry)
+        """ Get an item by key """
+        if(key is None or key not in self.cache_data.keys()):
+            return
+        self.uses[key] += 1
+        return self.cache_data.get(key)
