@@ -1,19 +1,10 @@
 #!/usr/bin/env python3
-"""
-Basic Flask app
-"""
-
-import re
-import babel
-from flask import Flask, render_template, request, g
+"""Task 5"""
+from flask import Flask, g, render_template, request
 from flask_babel import Babel
 
-
-class Config():
-    """ Configuration for babel translation """
-    LANGUAGES = ["en", "fr"]
-
-
+app = Flask(__name__)
+babel = Babel(app)
 users = {
     1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
     2: {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
@@ -22,45 +13,44 @@ users = {
 }
 
 
-app = Flask(__name__)
-app.config.from_object(Config())
-Babel.default_locale = "en"
-Babel.default_timezone = "UTC"
-babel = Babel(app)
+class Config(object):
+    """simple configuration"""
+    LANGUAGES = ['en', 'fr']
+    BABEL_DEFAULT_LOCALE = 'en'
+    BABEL_DEFAULT_TIMEZONE = 'UTC'
 
 
-@app.before_request
-def before_request_handler():
-    """before request"""
-    user = get_user()
-    g.user = user
+app.config.from_object(Config)
 
 
 def get_user():
-    """get user"""
+    """get user from header"""
     id = request.args.get('login_as')
-    if id is None:
-        return None
     try:
         return users.get(int(id))
-    except ValueError:
+    except Exception:
         return None
+
+
+@app.before_request
+def before_request():
+    """Before request used to stash user"""
+    g.user = get_user()
 
 
 @babel.localeselector
 def get_locale():
-    """locale func"""
-    lang = request.args.get('locale')
-    if lang is not None:
-        if lang in app.config['LANGUAGES']:
-            return lang
-    return request.accept_languages.best_match(app.config['LANGUAGES'])
+    """locale selector determining lang use for template"""
+    loc= request.args.get('locale')
+    if loc and loc in app.config['LANGUAGES']:
+        return loc
+    return request.accept_languages.best_match(Config.LANGUAGES)
 
 
-@app.route("/")
-def gettext():
-    """get text"""
-    return render_template('3-index.html')
+@app.route("/", methods=['GET'])
+def index():
+    """index rotue"""
+    return render_template("6-index.html")
 
 
 if __name__ == "__main__":

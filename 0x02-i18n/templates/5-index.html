@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>welcome To Holberton</title>
-    </head>
-    <body>
-        <header>
-            <h1>Hello World!</h1>
-            <h2>You are not logged in.</h2>
-        </header>
-        <header>
-            <h1>Hello World!</h1>
-            <h2>You are logged in as %(username)s.</h2>
-        </header>
-    </body>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{ _('home_title') }}</title>
+</head>
+<body>
+
+	<h1>{{ _('home_header') }}</h1>
+	{% if g.user %}
+		<p>{{ _(('logged_in_as'), username=g.user.get('name')) }}</p>
+	{% else %}
+		<p>{{ _('not_logged_in') }}</p>
+	{% endif %}
+
+</body>
 </html>

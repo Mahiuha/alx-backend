@@ -1,14 +1,14 @@
 # French translations for PROJECT.
-# Copyright (C) 2021 ORGANIZATION
+# Copyright (C) 2022 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-11-28 17:45+0000\n"
-"PO-Revision-Date: 2021-11-28 17:45+0000\n"
+"POT-Creation-Date: 2022-03-25 02:18+0000\n"
+"PO-Revision-Date: 2022-03-25 02:20+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
 "Language-Team: fr <LL@li.org>\n"
@@ -18,26 +18,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: templates/3-index.html:5
-msgid "%(home_title)"
+#: templates/2-index.html:5 templates/3-index.html:5 templates/5-index.html:5
+#: templates/6-index.html:5 templates/7-index.html:5
+msgid "home_title"
 msgstr "Bienvenue chez Holberton"
 
-#: templates/3-index.html:9
-msgid "%(home_header)"
+#: templates/2-index.html:9 templates/3-index.html:9 templates/5-index.html:9
+#: templates/6-index.html:9 templates/7-index.html:9
+msgid "home_header"
 msgstr "Bonjour monde!"
 
-#: templates/5-index.html:5
-msgid "%(home_title)"
-msgstr "Bienvenue chez Holberton"
-
-#: templates/5-index.html:9
-msgid "%(home_header)"
-msgstr "Bonjour monde!"
-
-#: templates/5-index.html:11
+#: templates/5-index.html:11 templates/6-index.html:11
+#: templates/7-index.html:11
 msgid "logged_in_as"
-msgstr "Vous êtes connecté en tant que %(username)s."
+msgstr "Vous êtes connecté en tant que %(username)s"
 
-#: templates/5-index.html:13
+#: templates/5-index.html:13 templates/6-index.html:13
+#: templates/7-index.html:13
 msgid "not_logged_in"
 msgstr "Vous n'êtes pas connecté."
+
