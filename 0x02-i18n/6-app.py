@@ -50,10 +50,20 @@ def get_user():
 @babel.localeselector
 def get_locale():
     """locale func"""
-    lang = request.args.get('locale')
-    if lang is not None:
-        if lang in app.config['LANGUAGES']:
-            return lang
+    url_lang = request.args.get('locale')
+    user = get_user()
+    header_lang = request.headers.get('locale')
+
+    if url_lang is not None:
+        if url_lang in app.config['LANGUAGES']:
+            return url_lang
+
+    if user is not None and user['locale'] in app.config['LANGUAGES']:
+        return user['locale']
+
+    if header_lang is not None and header_lang in app.config['LANGUAGES']:
+        return header_lang
+
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
